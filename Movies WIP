@@ -111,7 +111,19 @@ INSERT INTO topmovies(Rank,Title,Studio,Worldwide,Domestic,DomesticPct,Overseas,
 INSERT INTO topmovies(Rank,Title,Studio,Worldwide,Domestic,DomesticPct,Overseas,OverseasPct,Year) VALUES (99,'Casino Royale','Sony',599.00,167.40,0.28,431.60,0.72,2006);
 INSERT INTO topmovies(Rank,Title,Studio,Worldwide,Domestic,DomesticPct,Overseas,OverseasPct,Year) VALUES (100,'Tangled','BV',591.80,200.80,0.34,391.00,0.66,2010);
 
-SELECT * FROM topmovies ORDER BY year asc;
+SELECT * FROM topmovies ORDER BY title asc;
+
 SELECT Title, Domestic FROM topmovies ORDER BY Domestic asc;
+
 SELECT year,ROUND(AVG(Domestic)) as "Average Domestic Box Office" FROM topmovies Group BY Year;
+
 SELECT Title,Year,
+    CASE
+        WHEN Overseas > Domestic THEN "Ovs"
+        Else "Dom"
+        END AS "Domestic or Overseas Greater"
+From topmovies;
+
+SELECT count(Title) as "count/year",Year FROM topmovies Group by Year HAVING count(title)>5;
+
+SELECT count(Title) as "count/year",Year,Domestic FROM topmovies Group by Year HAVING count(title)>5 AND Domestic>200;
