@@ -63,6 +63,12 @@ INSERT INTO card_games(date_played,game_name,player_name,score) VALUES ('2015/03
 INSERT INTO card_games(date_played,game_name,player_name,score) VALUES ('2015/03/25','Rummy','Hopper',443);
 
 SELECT count(*), game_name from card_games group by game_name;
-/* I want to know who won the most games. sum score by player name grouped by date? researching having more, and multiple group bys */
-SELECT sum(score), player_name from card_games group by player_name ORDER BY sum(score);
-SELECT sum(score), player_name, date_played from card_games group by player_name;
+
+/*crap. that brought back every instance of the each card game, not by date. Dates throwing me off since multiple lines of one date. come back to later*/
+
+SELECT  
+
+
+SELECT date_played,game_name,Max(score),player_name from card_games group by date_played, game_name;
+
+SELECT player_name,Count(player name) From card_games WHERE Max(score) date_played,game_name,Max(score),player_name from card_games group by date_played, game_name;
