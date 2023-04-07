@@ -1,0 +1,58 @@
+CREATE TABLE authors (id INTEGER PRIMARY KEY AUTOINCREMENT, fullname TEXT);
+
+INSERT INTO authors (fullname) VALUES ("Robin McKinley");
+INSERT INTO authors (fullname) VALUES ("JK Rowling");
+INSERT INTO authors (fullname) VALUES ("Mary Shelley");
+INSERT INTO authors (fullname) VALUES ("George R.R. Martin");
+INSERT INTO authors (fullname) VALUES ("Jack London");
+INSERT INTO authors (fullname) VALUES ("Marguerite Henry");
+INSERT INTO authors (fullname) VALUES ("Will James");
+INSERT INTO authors (fullname) VALUES ("James Herriot");
+INSERT INTO authors (fullname) VALUES ("Anna Sewell");
+
+
+CREATE Table books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, author_id INTEGER, year_pub INTEGER);
+
+INSERT INTO books (title,author_id,year_pub) VALUES ("The Blue Sword",1,1982);
+INSERT INTO books (title,author_id,year_pub) VALUES ("The Hero and the Crown",1,1984);
+INSERT INTO books (title,author_id,year_pub) VALUES ("Harry Potter and the Philosopher's Stone",2,1997);
+INSERT INTO books (title,author_id,year_pub) VALUES ("Harry Potter and the Chamber of Secrets",2,1998);
+INSERT INTO books (title,author_id,year_pub) VALUES ("Harry Potter and the Prisoner of Azkaban",2,1999);
+INSERT INTO books (title,author_id,year_pub) VALUES ("Harry Potter and the Goblet of Fire",2,2000);
+INSERT INTO books (title,author_id,year_pub) VALUES ("Harry Potter and the Order of the Phoenix",2,2003);
+INSERT INTO books (title,author_id,year_pub) VALUES ("Harry Potter and the Half-Blood Prince",2,2005);
+INSERT INTO books (title,author_id,year_pub) VALUES ("Harry Potter and the Deathly Hallows",2,2007);
+INSERT INTO books (title,author_id,year_pub) VALUES ("Frankenstein",3,1818);
+INSERT INTO books (title,author_id,year_pub) VALUES ("A Song of Ice and Fire",4,1996);
+INSERT INTO books (title,author_id,year_pub) VALUES ("White Fang",5,1906);
+INSERT INTO books (title,author_id,year_pub) VALUES ("The Call of the Wild",5,1903);
+INSERT INTO books (title,author_id,year_pub) VALUES ("King of Wind",6,1948);
+INSERT INTO books (title,author_id,year_pub) VALUES ("Misty of Chincoteague",6,1947);
+INSERT INTO books (title,author_id,year_pub) VALUES ("Smoky the Cowhorse",7,1926);
+INSERT INTO books (title,author_id,year_pub) VALUES ("All Creatures Great and Small",8,1970);
+INSERT INTO books (title,author_id,year_pub) VALUES ("All Things Bright and Beautiful",8,1974);
+INSERT INTO books (title,author_id,year_pub) VALUES ("All things Wise and Wonderful",8,1977);
+INSERT INTO books (title,author_id,year_pub) VALUES ("Black Beauty",9,1877);
+
+
+SELECT books.title, authors.fullname, books.year_pub 
+FROM books
+LEFT JOIN authors
+ON authors.id=books.author_id;
+
+SELECT COUNT(books.title) as num_books_written, authors.fullname
+FROM books
+LEFT JOIN authors
+ON authors.id=books.author_id
+GROUP BY authors.fullname;
+
+SELECT books.title, authors.fullname, books.year_pub 
+FROM books
+LEFT JOIN authors
+ON authors.id=books.author_id
+WHERE year_pub>1990;
+
+
+
+
+
