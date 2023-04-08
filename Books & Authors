@@ -1,3 +1,6 @@
+#In this SQL I'm creating 2 databases, one with author information and one with book information and answering questions with joins.
+
+
 CREATE TABLE authors (id INTEGER PRIMARY KEY AUTOINCREMENT, fullname TEXT);
 
 INSERT INTO authors (fullname) VALUES ("Robin McKinley");
@@ -34,18 +37,20 @@ INSERT INTO books (title,author_id,year_pub) VALUES ("All Things Bright and Beau
 INSERT INTO books (title,author_id,year_pub) VALUES ("All things Wise and Wonderful",8,1977);
 INSERT INTO books (title,author_id,year_pub) VALUES ("Black Beauty",9,1877);
 
-
+#Make a query showing books with their titles, authors, and published year
 SELECT books.title, authors.fullname, books.year_pub 
 FROM books
 LEFT JOIN authors
 ON authors.id=books.author_id;
 
+#How many books has each author written?
 SELECT COUNT(books.title) as num_books_written, authors.fullname
 FROM books
 LEFT JOIN authors
 ON authors.id=books.author_id
 GROUP BY authors.fullname;
 
+#What books were published after 1990?
 SELECT books.title, authors.fullname, books.year_pub 
 FROM books
 LEFT JOIN authors
