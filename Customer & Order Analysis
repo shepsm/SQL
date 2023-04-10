@@ -1,0 +1,37 @@
+#In this SQL, I'm querying a database with multiple tables in it to quantify statistics about customer and order data.
+
+#1 How many orders were placed in January?
+SELECT COUNT(orderID) FROM BIT_DB.JanSales 
+WHERE orderID<>'Order ID' AND length(orderID)=6;
+
+#2. How many of those orders were for an iPhone? 
+SELECT COUNT(orderID), Product FROM BIT_DB.JanSales 
+WHERE orderID<>'Order ID' AND length(orderID)=6 
+AND Product = 'iPhone';
+
+#3. Select the customer account numbers for all the orders that were placed in February. 
+SELECT distinct c.acctnum FROM BIT_DB.customers c
+INNER JOIN BIT_DB.FebSales f
+ON f.orderID=c.order_id
+WHERE f.orderID<>'Order ID' AND length(f.orderID)=6;
+
+#4. Which product was the cheapest one sold in January, and what was the price? 
+SELECT distinct product, price FROM BIT_DB.JanSales
+ORDER BY Price asc
+LIMIT 1;
+
+#5. What is the total revenue for each product sold in January?
+SELECT sum(Quantity)*price AS "Revenue", Product FROM BIT_DB.JanSales
+GROUP BY Product;
+
+#6. Which products were sold in February at 548 Lincoln St, Seattle, WA 98101, how many of each were sold, and what was the total revenue?
+SELECT Product,COUNT(Product) AS "#Sold", location, sum(Quantity)*price AS "Revenue" FROM BIT_DB.FebSales
+WHERE location='548 Lincoln St, Seattle, WA 98101' 
+Group By Product;
+
+#7. How many customers ordered more than 2 products at a time, and what was the average amount spent for those customers? 
+SELECT COUNT(distinct c.acctnum),c.acctnum AS "Cust#", AVG(f.price*f.Quantity) FROM BIT_DB.FebSales f
+LEFT JOIN BIT_DB.customers c
+ON f.orderID=c.order_id
+WHERE f.Quantity>2
+And orderID<>'Order ID' AND length(orderID)=6;
