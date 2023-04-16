@@ -1,0 +1,72 @@
+/In these queries I'm solving a mystery. First, I need to find the right crime scene report. I know the crime was a ​murder​ that occurred sometime on ​Jan.15, 2018​ and 
+that it took place in ​SQL City​. Then I need to solve it./
+
+/first, I found the name of available tables/
+SELECT name 
+FROM sqlite_master
+where type = 'table';
+ 
+ /Then, I ran the following for each table (truncated to one table here) to find the structure of each table/
+ SELECT sql 
+ FROM sqlite_master
+ where name = 'interview'
+ 
+ /I ran this query to find all murders in SQL City. I did not specify which date so I could find the formatting of the integer. The resulting table had 3 murders committed
+ in 2018 and only one on Jan 15,2018, so I didn't need to further refine/
+SELECT date,type,description,city FROM crime_scene_report
+WHERE city LIKE "SQL City"
+AND type LIKE "Murder";
+
+/finding the first witness at the last house on Northwestern Dr/
+SELECT id, name, license_id, address_number, address_street_name,ssn FROM person
+WHERE address_street_name LIKE "Northwestern Dr%"
+ORDER BY address_number desc;
+
+/finding the second witness 'Anabelle' on Franklin/
+SELECT id, name, license_id, address_number, address_street_name,ssn FROM person
+WHERE address_street_name LIKE "Franklin Ave%"
+AND name LIKE "%Annabel%";
+
+ /getting interview transcripts from the 2 witnesses/
+ SELECT p.name,i.transcript FROM interview i
+INNER JOIN person p
+ON i.person_id=p.id
+WHERE i.person_id=14887
+OR i.person_id=16371;
+
+/narrowing down suspects based on interviews. worked out on January 9, and has gym bag with "48Z" on it/
+SELECT ci.membership_id,ci.check_in_date,m.name,m.person_id FROM get_fit_now_check_in ci
+INNER JOIN get_fit_now_member m
+ON m.id=ci.membership_id
+WHERE ci.membership_ID LIKE "48Z%"
+AND ci.check_in_date = 20180109;
+
+/seeing if either suspect from prior query has an interview. Only one does./
+SELECT i.person_id,p.name, i.transcript FROM interview i
+JOIN person p
+ON i.person_id=p.id
+WHERE i.person_id=28819
+OR i.person_id=67318;
+
+/based on prior interview, narrowed down suspect again. 3 remain./
+SELECT p.name,p.id,dl.age,dl.height,dl.hair_color,dl.gender,dl.plate_number,dl.car_make,dl.car_model FROM drivers_license dl
+INNER JOIN person p 
+ON p.license_id=dl.id
+WHERE dl.gender = "female"
+AND car_make LIKE "tesla"
+AND car_model LIKE "Model S"
+AND height BETWEEN 65 and 67;
+
+/Finding if any of the 3 remaining suspects went to the symphony 3 times in December 2017./
+SELECT fb.event_name,p.name,COUNT(fb.event_name) AS Dec_Symph_Count FROM facebook_event_checkin fb
+JOIN person p
+ON p.id=fb.person_id
+WHERE p.id=78881
+OR p.id=90700
+OR p.id=99716
+AND fb.date BETWEEN 20171201 and 20171231
+GROUP BY p.name;
+
+/Answer: Miranda Priestly. Correct.
+
+ 
