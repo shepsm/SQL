@@ -5,6 +5,7 @@ CREATE TABLE workdb.equipment(equip_num INTEGER PRIMARY KEY,equip_desc VARCHAR);
 CREATE TABLE workdb.addressbook(AB_ID INTEGER PRIMARY KEY,name TEXT);
 CREATE TABLE workdb.acctpayable(date DATE,vendorID INTEGER PRIMARY KEY,explanation VARCHAR,amount DECIMAL,equip_ID INTEGER);
 
+#This query ONLY shows invoices that were coded to a piece of equipment. 
 SELECT ap.vendorID,ab.name,ap.explanation,ap.amount,e.equip_num,e.equip_desc FROM workdb.acctpayable ap
 LEFT JOIN workdb.addressbook ab
 ON ab.AB_ID=ap.vendorID
