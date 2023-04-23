@@ -28,3 +28,9 @@ ON ab.AB_ID=ap.vendorID
 INNER JOIN workdb.equipment e
 ON e.equip_num=ap.equip_ID;
 
+#This query shows how much each customer has spent with my company. If I had included open amounts in my tables, it would be simple to also filter out paid amounts and show what each person still owes.
+SELECT ab.name AS Client_Name,SUM(ar.amount) FROM acctrec ar
+LEFT JOIN addressbook ab
+ON ab.AB_ID=ar.cust_ID
+GROUP BY ab.name
+ORDER BY ar.amount asc,ab.name asc;
