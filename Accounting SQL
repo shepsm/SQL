@@ -1,0 +1,29 @@
+#In this SQL code, I've created an accounting database with 4 tables patterened off the ERP my work is currently using. (using SQLite3, which does not support the CREATE DATABASE command)
+
+CREATE TABLE workdb.acctrec(date DATE,cust_ID INTEGER PRIMARY KEY,amount DECIMAL);
+CREATE TABLE workdb.equipment(equip_num INTEGER PRIMARY KEY,equip_desc VARCHAR);
+CREATE TABLE workdb.addressbook(AB_ID INTEGER PRIMARY KEY,name TEXT);
+CREATE TABLE workdb.acctpayable(date DATE,vendorID INTEGER PRIMARY KEY,explanation VARCHAR,amount DECIMAL,equip_ID INTEGER);
+
+SELECT ap.vendorID,ab.name,ap.explanation,ap.amount,e.equip_num,e.equip_desc FROM workdb.acctpayable ap
+LEFT JOIN workdb.addressbook ab
+ON ab.AB_ID=ap.vendorID
+INNER JOIN workdb.equipment e
+ON e.equip_num=ap.equip_ID;
+
+#Here I joined the addressbook table to get vendor names and joined the equipment table to get equipment descriptions and filtered to just a single piece of equipment.
+SELECT ap.vendorID,ab.name,ap.explanation,ap.amount,e.equip_num,e.equip_desc FROM workdb.acctpayable ap
+LEFT JOIN workdb.addressbook ab
+ON ab.AB_ID=ap.vendorID
+LEFT JOIN workdb.equipment e
+ON e.equip_num=ap.equip_ID
+WHERE ap.equip_ID=7;
+
+#Here I've also joined the address book and equipment tables, and used a window function to show to total spent on each piece of equipment while retaining the detail per line.
+SELECT ap.vendorID,ab.name,ap.explanation,ap.amount,e.equip_num,e.equip_desc,SUM(amount) OVER (PARTITION BY ap.equip_ID) as "Total_Capitalized_Costs"
+FROM workdb.acctpayable ap
+LEFT JOIN workdb.addressbook ab
+ON ab.AB_ID=ap.vendorID
+INNER JOIN workdb.equipment e
+ON e.equip_num=ap.equip_ID;
+
