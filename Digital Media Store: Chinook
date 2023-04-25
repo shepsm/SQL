@@ -12,7 +12,7 @@ WHERE Country="Brazil";
 SELECT c.FirstName,c.LastName,i.InvoiceID,i.InvoiceDate,i.BillingCountry FROM chinook.customers c
 JOIN chinook.invoices i
 ON c.customerID=i.customerID
-WHERE Country="Brazil";
+WHERE i.Country="Brazil";
 
 #Show the Employees who are Sales Agents.
 SELECT FirstName,LastName,Title FROM chinook.employees
