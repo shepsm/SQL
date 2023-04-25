@@ -1,0 +1,87 @@
+#I've downloaded a digitam edia store database called Chinook and answered the following questions.
+
+#Show Customers (their full names, customer ID, and country) who are not in the US. 
+SELECT FirstName,LastName,CustomerID,Country FROM chinook.customers
+WHERE Country<>"USA";
+
+#Show only the Customers from Brazil.
+SELECT FirstName,LastName,CustomerID,Country FROM chinook.customers
+WHERE Country="Brazil";
+
+#Find the Invoices of customers who are from Brazil. The resulting table should show the customer's full name, Invoice ID, Date of the invoice, and billing country.
+SELECT c.FirstName,c.LastName,i.InvoiceID,i.InvoiceDate,i.BillingCountry FROM chinook.customers c
+JOIN chinook.invoices i
+ON c.customerID=i.customerID
+WHERE Country="Brazil";
+
+#Show the Employees who are Sales Agents.
+SELECT FirstName,LastName,Title FROM chinook.employees
+WHERE Title LIKE "Sales Support Agent";
+
+#Find a unique/distinct list of billing countries from the Invoice table.
+Select Distinct BillingCountry FROM chinook.invoices
+ORDER BY BillingCountry asc;
+
+#Provide a query that shows the invoices associated with each sales agent. The resulting table should include the Sales Agent's full name.
+SELECT i.invoiceId,e.FirstName,e.LastName FROM chinook.customers c
+JOIN chinook.invoices i
+ON i.CustomerId=c.CustomerId
+JOIN chinook.employees e
+ON e.EmployeeId=c.SupportRepId;
+
+#Show the Invoice Total, Customer name, Country, and Sales Agent name for all invoices and customers.
+SELECT i.Total,c.FirstName,c.LastName,i.BillingCountry,e.FirstName AS SalesRepFirstName,e.LastName AS SalesRepLastName FROM chinook.customers c
+JOIN chinook.invoices i
+ON i.CustomerId=c.CustomerId
+JOIN chinook.employees e
+ON e.EmployeeID=c.SupportRepId;
+
+#How many Invoices were there in 2009?
+SELECT COUNT(DISTINCT InvoiceId) FROM chinook.invoices
+WHERE InvoiceDate LIKE "2009%";
+
+#What are the total sales for 2009?
+SELECT SUM(Total) FROM chinook.invoices
+WHERE InvoiceDate LIKE "2009%";
+
+#Write a query that includes the purchased track name with each invoice line ID. (I decided a left join made more sense in case there were any missing tracts in the tracks table)
+SELECT i.invoiceId,i.InvoiceLineId,t.Name FROM chinook.invoice_items i
+LEFT JOIN chinook.tracks t
+ON t.TrackId=i.TrackID;
+
+Write a query that includes the purchased track name AND artist name with each invoice line ID.
+SELECT i.invoiceId,i.InvoiceLineId,t.Name AS SongName,art.Name As Artist_Name FROM chinook.invoice_items i
+JOIN chinook.tracks t
+ON t.TrackId=i.TrackID
+JOIN chinook.albums a
+ON a.AlbumId=t.AlbumID
+JOIN chinook.artists art
+ON art.ArtistId=a.artistId
+
+#Provide a query that shows all the Tracks, and include the Album name, Media type, and Genre.
+SELECT t.Name AS TrackName,a.Title AS AlbumName,m.Name AS MediaType,g.Name AS Genre FROM chinook.tracks t
+JOIN chinook.albums a
+ON t.AlbumId=a.AlbumId
+JOIN chinook.media_types m
+ON m.MediaTypeId=t.MediaTypeId
+JOIN chinook.genres g
+ON g.GenreId=t.GenreId;
+
+#Show the total sales made by each sales agent.
+SELECT SUM(i.Total) AS SalesRepTotals,e.FirstName AS SalesRepFirstName,e.LastName AS SalesRepLastName FROM chinook.customers c
+JOIN chinook.invoices i
+ON i.CustomerId=c.CustomerId
+JOIN chinook.employees e
+ON e.EmployeeID=c.SupportRepId
+GROUP BY e.FirstName,e.LastName;
+
+Which sales agent made the most dollars in sales in 2009?
+SELECT SUM(i.Total) AS SalesRepTotals,e.FirstName AS SalesRepFirstName,e.LastName AS SalesRepLastName FROM chinook.customers c
+JOIN chinook.invoices i
+ON i.CustomerId=c.CustomerId
+JOIN chinook.employees e
+ON e.EmployeeID=c.SupportRepId
+WHERE i.InvoiceDate LIKE "2009%"
+GROUP BY e.FirstName,e.LastName
+ORDER BY SalesRepTotals asc
+LIMIT 1;
