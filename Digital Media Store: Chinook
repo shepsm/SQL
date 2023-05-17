@@ -1,4 +1,4 @@
-#I've downloaded a digitam edia store database called Chinook and answered the following questions.
+#I've downloaded a digital media store database called Chinook and answered the following questions.
 
 #Show Customers (their full names, customer ID, and country) who are not in the US. 
 SELECT FirstName,LastName,CustomerID,Country FROM chinook.customers
